@@ -10,9 +10,7 @@ public class playerMovement : MonoBehaviour
     private Animator animator;
     // and then with a Camera object
     private Camera mainCamera;
-    
-    //will be used to store the transform value of the player before something happens
-    private float currentYPosition ;
+ 
     //float variable that stores how fast the player moves
     private float movementSpeed = 5f;
     
@@ -25,26 +23,17 @@ public class playerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         // assigns mainCamera the value Camera.main (which unity already recognises as the main camera)
         mainCamera = Camera.main;
-        //assigns currentPosition the value of the players transform component when the game is started
-        currentYPosition = transform.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        print(currentYPosition);
         //When the left or right arrow key is pressed a -1 or 1 float value is returned
         float moveDirection = Input.GetAxis("Horizontal");
         //calls Move() method with moveDirection as parameter
         Move(moveDirection,movementSpeed);
-        CheckHeight(currentYPosition);
 
     }
-    private void FixedUpdate()
-    {
-        
-    }
-
     //when called the player will move in the correct direction, and face the right direction
     void Move(float movementDirection, float moveSpeed)
     {
@@ -76,17 +65,5 @@ public class playerMovement : MonoBehaviour
         // actually stores any character scale changes to the transform component of the player unity game object
         transform.localScale = characterScale;
     }
-    
-    // the purpose of this method is to when called change the player animation depending on if they are, jumping, falling or on flat ground
-    void CheckHeight(float initialYPosition)
-    {
-        if (transform.position.y < initialYPosition -0.3)
-        {
-            animator.SetTrigger("falling");
-        }
-        if (transform.position.y > initialYPosition +0.3)
-        {
-            animator.SetTrigger("jumping");
-        }
-    }
+
 }
