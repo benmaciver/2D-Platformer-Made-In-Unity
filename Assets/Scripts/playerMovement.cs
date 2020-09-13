@@ -62,6 +62,8 @@ public class playerMovement : MonoBehaviour
         //Time.deltaTime is a unity vakue that stores the time in seconds since the last frame
         //the position of the player is increased on the x axis by the movementDirection at moveSpeed (Time.deltaTime ensures that the player dosent zip past the screen when moving)
         transform.position += new Vector3(movementDirection, 0f, 0f) * Time.deltaTime * moveSpeed;
+        //moves the camera on the x axis the player moves (only once the player passes the middle of the screen 
+        if (transform.position.x > 0) { mainCamera.transform.position += new Vector3(movementDirection, 0f, 0f) * Time.deltaTime * moveSpeed; }
         // actually stores any character scale changes to the transform component of the player unity game object
         transform.localScale = characterScale;
     }
