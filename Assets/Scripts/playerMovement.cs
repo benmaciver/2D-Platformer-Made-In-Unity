@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class playerMovement : MonoBehaviour
 {
@@ -39,16 +40,18 @@ public class playerMovement : MonoBehaviour
         float moveDirection = Input.GetAxis("Horizontal");
         //calls Movement() method with moveDirection as parameter
         Movement(moveDirection,movementSpeed);
-
+        Vector3 cameraPosition = mainCamera.transform.position;
+        if (transform.position.x > 0) { cameraPosition.x = transform.position.x; } //after the player gets half way through the start screen, the camera follows where the player goes
+        mainCamera.transform.position = cameraPosition;
+        
+        
         if (IsGrounded() == true){animator.SetBool("isJumping", false);} // Calls IsGrounded method to check whether playing is touching the ground, if so stops jumping animation
         if (IsGrounded() == false){animator.SetBool("isJumping", true);} //Does the opposite
+        
         if (Input.GetKeyDown(KeyCode.UpArrow)){Jump();} //If Up arrow key pressed calls Jump() method
+        if (Input.GetKeyDown(KeyCode.Space)){Attack();} //when space is clicked Attack() is called
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Attack();
-        }
-
+        if( transform.position.y < -10) { Dead(); }//when the player falls off the map it changes to the death screen
     }
     //when called the player will move in the correct direction, and face the right direction
     void Movement(float movementDirection, float moveSpeed)
@@ -78,8 +81,6 @@ public class playerMovement : MonoBehaviour
         //Time.deltaTime is a unity vakue that stores the time in seconds since the last frame
         //the position of the player is increased on the x axis by the movementDirection at moveSpeed (Time.deltaTime ensures that the player dosent zip past the screen when moving)
         transform.position += new Vector3(movementDirection, 0f, 0f) * Time.deltaTime * moveSpeed;
-        //moves the camera on the x axis the player moves (only once the player passes the middle of the screen 
-        if (transform.position.x > 0) { mainCamera.transform.position += new Vector3(movementDirection, 0f, 0f) * Time.deltaTime * moveSpeed; }
         // actually stores any character scale changes to the transform component of the player unity game object
         transform.localScale = characterScale;
     }
@@ -120,6 +121,11 @@ public class playerMovement : MonoBehaviour
         }
         
         return raycastHit.collider != null;
+    }
+
+    void Dead()
+    {
+        SceneManager.LoadScene(1);
     }
 
 }
