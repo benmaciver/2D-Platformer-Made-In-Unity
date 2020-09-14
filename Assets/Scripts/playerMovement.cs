@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour
 {
+    //creates public unity LayerMask object, that is assigned the platform layer in the unity editor
+    public LayerMask platformLayerMask;
     //creates private empty Rigidbody2D obbject from the UnityEngine class 
     private Rigidbody2D rigidBody;
     // Does the same with an animator object from the same class
     private Animator animator;
     // and then with a Camera object
     private Camera mainCamera;
- 
+
+    private Collider2D playerCollider;
+
     //float variable that stores how fast the player moves
     private float movementSpeed = 5f;
+
+    private float nextAttackTime = 0f;
     
     // Start is called before the first frame update
     void Start()
@@ -23,6 +29,7 @@ public class playerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         // assigns mainCamera the value Camera.main (which unity already recognises as the main camera)
         mainCamera = Camera.main;
+        playerCollider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -30,12 +37,21 @@ public class playerMovement : MonoBehaviour
     {
         //When the left or right arrow key is pressed a -1 or 1 float value is returned
         float moveDirection = Input.GetAxis("Horizontal");
-        //calls Move() method with moveDirection as parameter
-        Move(moveDirection,movementSpeed);
+        //calls Movement() method with moveDirection as parameter
+        Movement(moveDirection,movementSpeed);
+
+        if (IsGrounded() == true){animator.SetBool("isJumping", false);} // Calls IsGrounded method to check whether playing is touching the ground, if so stops jumping animation
+        if (IsGrounded() == false){animator.SetBool("isJumping", true);} //Does the opposite
+        if (Input.GetKeyDown(KeyCode.UpArrow)){Jump();} //If Up arrow key pressed calls Jump() method
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Attack();
+        }
 
     }
     //when called the player will move in the correct direction, and face the right direction
-    void Move(float movementDirection, float moveSpeed)
+    void Movement(float movementDirection, float moveSpeed)
     {
         //stores the scale/size of the player(or at least the unity object this script is assigned to which in this case is the player)
         Vector3 characterScale = transform.localScale;
@@ -66,6 +82,44 @@ public class playerMovement : MonoBehaviour
         if (transform.position.x > 0) { mainCamera.transform.position += new Vector3(movementDirection, 0f, 0f) * Time.deltaTime * moveSpeed; }
         // actually stores any character scale changes to the transform component of the player unity game object
         transform.localScale = characterScale;
+    }
+
+    //When called this method causes the player's character to jump in the air
+    void Jump()
+    {
+        //As long as the player is touching the ground (prevents flying)
+        if (IsGrounded() == true)
+        {
+            //uses unityEngine method to apply force to the player upwards in the y direction, with the unity 2d ForceMode of Impulse (force applied all at once)
+            rigidBody.AddForce(Vector2.up * 7.5f, ForceMode2D.Impulse); //
+        }
+    }
+
+    void Attack()
+    {
+ 
+        if (Time.time >= nextAttackTime)
+        {
+            animator.SetTrigger("Attack");
+            nextAttackTime = Time.time + 1f;
+        }
+    }
+
+    private bool IsGrounded()
+    {
+        //creates a raycascast2d object from UnityEngine that starts at the centre of the player going down on the y axis to the bottom of the players box collider plus 1, looking for other collisders pn the platform Layer (the ground)
+        RaycastHit2D raycastHit = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 1f,platformLayerMask);
+        Color rayColour;
+        if (raycastHit.collider == null)
+        {
+            rayColour = Color.red;
+        }
+        else
+        {
+            rayColour = Color.green;
+        }
+        
+        return raycastHit.collider != null;
     }
 
 }
