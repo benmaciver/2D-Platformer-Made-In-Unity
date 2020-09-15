@@ -40,10 +40,7 @@ public class playerMovement : MonoBehaviour
         float moveDirection = Input.GetAxis("Horizontal");
         //calls Movement() method with moveDirection as parameter
         Movement(moveDirection,movementSpeed);
-        Vector3 cameraPosition = mainCamera.transform.position;
-        if (transform.position.x > 0) { cameraPosition.x = transform.position.x; } //after the player gets half way through the start screen, the camera follows where the player goes
-        mainCamera.transform.position = cameraPosition;
-        
+        mainCamera.transform.position = CameraMovement(mainCamera.transform);
         
         if (IsGrounded() == true){animator.SetBool("isJumping", false);} // Calls IsGrounded method to check whether playing is touching the ground, if so stops jumping animation
         if (IsGrounded() == false){animator.SetBool("isJumping", true);} //Does the opposite
@@ -85,6 +82,15 @@ public class playerMovement : MonoBehaviour
         transform.localScale = characterScale;
     }
 
+    //this method moves the camera  along with the player as they move
+    private Vector3 CameraMovement(Transform camera)
+    {
+        Vector3 cameraPosition = camera.position;
+        if (transform.position.x > 0) { cameraPosition.x = transform.position.x; } //after the player gets half way through the start screen, the camera follows where the player goes
+        if (transform.position.x > 90) { print("Track Complete!"); }
+        return cameraPosition;
+    }
+
     //When called this method causes the player's character to jump in the air
     void Jump()
     {
@@ -95,7 +101,7 @@ public class playerMovement : MonoBehaviour
             rigidBody.AddForce(Vector2.up * 7.5f, ForceMode2D.Impulse); //
         }
     }
-
+    //this method triggers the player to do their attack ability
     void Attack()
     {
  
@@ -105,7 +111,7 @@ public class playerMovement : MonoBehaviour
             nextAttackTime = Time.time + 1f;
         }
     }
-
+    //this method checks whether the player is currently grounded or not
     private bool IsGrounded()
     {
         //creates a raycascast2d object from UnityEngine that starts at the centre of the player going down on the y axis to the bottom of the players box collider plus 1, looking for other collisders pn the platform Layer (the ground)
@@ -122,7 +128,7 @@ public class playerMovement : MonoBehaviour
         
         return raycastHit.collider != null;
     }
-
+    // is called when the player has died (loses health or falls off the map
     void Dead()
     {
         SceneManager.LoadScene(1);
