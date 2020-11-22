@@ -131,7 +131,7 @@ public class playerMovement : MonoBehaviour
     // is called when the player has died (loses health or falls off the map
     void Dead()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
 }
