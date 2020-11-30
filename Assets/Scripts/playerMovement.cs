@@ -49,6 +49,10 @@ public class playerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)){Attack();} //when space is clicked Attack() is called
 
         if( transform.position.y < -10) { Dead(); }//when the player falls off the map it changes to the death screen
+        if (transform.position.x > 90) //if finish line reached
+        {
+            SceneManager.LoadScene(3); //loads win screen
+        }
     }
     //when called the player will move in the correct direction, and face the right direction
     void Movement(float movementDirection, float moveSpeed)
@@ -87,7 +91,6 @@ public class playerMovement : MonoBehaviour
     {
         Vector3 cameraPosition = camera.position;
         if (transform.position.x > 0) { cameraPosition.x = transform.position.x; } //after the player gets half way through the start screen, the camera follows where the player goes
-        if (transform.position.x > 90) { print("Track Complete!"); }
         return cameraPosition;
     }
 
@@ -133,5 +136,6 @@ public class playerMovement : MonoBehaviour
     {
         SceneManager.LoadScene(2);
     }
+
 
 }
