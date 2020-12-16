@@ -13,4 +13,13 @@ public class DeathMenu : MonoBehaviour
     {
         Application.Quit();
     }
+    public void quitLeaderboard()
+    {
+        SceneManager.LoadScene(3);
+    }
+    public void goToLeaderboard()
+    {
+        SceneManager.LoadScene(4);
+    }
 }
+

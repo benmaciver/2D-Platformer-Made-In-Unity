@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\OnScreenTimer.cs" />
     <Compile Include="Assets\Scripts\StartMenu.cs" />
     <Compile Include="Assets\Scripts\coinPickups.cs" />
+    <Compile Include="Assets\Scripts\displayLeaderboard.cs" />
     <Compile Include="Assets\Scripts\displayTime.cs" />
     <Compile Include="Assets\Scripts\playerMovement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
