@@ -16,23 +16,28 @@ public class displayTime : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //gets leaderboard text file
-        //leaderboard= Application.streamingAssetsPath + "leaderboard" + ".txt";
+        leaderboard= Application.streamingAssetsPath + "/Text Files/" + "Leaderboard" + ".txt";
         //gets the time taken
         timeTaken = PlayerPrefs.GetInt("finalTime");
         //updates leaderboard with new time
-        //updateLeaderboardTextFile(timeTaken,leaderboard);
+        updateLeaderboardTextFile(timeTaken,leaderboard);
+        
         //displays it on screen
         GetComponent<TMPro.TextMeshProUGUI>().text = $"Level Complete!\nYou took: {timeTaken} seconds";
     }
 
-    /*void updateLeaderboardTextFile( int timeSubmission, string textFile)
+    void updateLeaderboardTextFile( int timeSubmission, string textFile)
     {
+        //print($"Time taken:{timeSubmission}");
         // creates streamwritter oject (from System.IO namespace)
         //this allows for writing to text files 
         StreamWriter sw = new StreamWriter(textFile, true); //true tells it that we are appending (adding) to the file
         string newLine = $"{timeSubmission} seconds";
         sw.WriteLine(newLine);
+        sw.Close();
 
-    }*/
+
+    }
 }
