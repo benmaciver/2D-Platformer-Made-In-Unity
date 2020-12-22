@@ -18,12 +18,12 @@ public class displayTime : MonoBehaviour
         //gets the time taken
         timeTaken = PlayerPrefs.GetInt("finalTime");
         //updates leaderboard with new time
-        updateLeaderboardTextFile(timeTaken,leaderboard);
+        updateLeaderboard(timeTaken,leaderboard);
         //displays it on screen
         GetComponent<TMPro.TextMeshProUGUI>().text = $"Level Complete!\nYou took: {timeTaken} seconds";
     }
 
-    void updateLeaderboardTextFile( int timeSubmission, string textFile)
+    void updateLeaderboard( int timeSubmission, string textFile)
     {
         // creates streamwritter oject (from System.IO namespace)
         //this allows for writing to text files 
